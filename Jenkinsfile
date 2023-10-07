@@ -38,8 +38,9 @@ pipeline {
 
     stage('Deploying React.js container to Kubernetes') {
       steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'minikube', contextName: '', credentialsId: 'k8s_jenkins_admin_token', namespace: 'kube-system', serverUrl: 'https://192.168.49.2:8443']]) {
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
         }
       }
     }
