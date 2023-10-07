@@ -39,6 +39,8 @@ pipeline {
     stage('Deploying React.js container to Kubernetes') {
       steps {
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'minikube', contextName: '', credentialsId: 'k8s_jenkins_admin_token', namespace: 'kube-system', serverUrl: 'https://192.168.49.2:8443']]) {
+        sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
+        sh 'chmod u+x ./kubectl'
         sh './kubectl apply -f deployment.yaml'
         sh './kubectl apply -f service.yaml'
         }
